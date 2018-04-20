@@ -26,7 +26,7 @@ public class Farm : Tile {
 		} 
 		if (gm != null) {
 			for (int i = 0; i < this.people; i++) {
-				if (amnt > 0) {
+				if (amnt > 0 && gm.food < gm.mFood) {
 					gm.food++;
 					amnt--;
 				}

@@ -22,7 +22,8 @@ public class Tile : MonoBehaviour {
 	public Action[] actions;
 
 	protected void Awake() {
-		actions = new Action[1];
+		actions = new Action[2];
 		actions[0] = new TransferPeople();
+		actions[1] = new BuildFarm();
 	}
 }

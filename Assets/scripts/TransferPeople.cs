@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TransferPeople : Action {
 	public GameObject[] inputs = new GameObject[2];
+	public new string actionName = "Transfer People";
 
 	public override void TakeAction (GameObject input) {
 		if (inputs[0] == null) {

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class GameManager : MonoBehaviour {
 
 	public Tile selected;
-	public Tile[] tiles;
+	public List<Tile> tiles = new List<Tile>(0);
 
 	public Action act = null;
 
@@ -21,14 +21,17 @@ public class GameManager : MonoBehaviour {
 	public float timer;
 
 	public Text text1, text2, text3;
-	public Text fText, pText;
+	public Text fText, pText, wText;
 
 	public GameObject button;
 	public bool actionsDisplayed = false;
 	public List<GameObject> buttonCollect = new List<GameObject>(0);
 
 	void Start() {
-		tiles = FindObjectsOfType<Tile>();
+		Tile[] tilesGet = FindObjectsOfType<Tile>();
+		foreach (Tile t in tilesGet) {
+			tiles.Add(t);
+		}
 		timer = updateDelay;
 	}
 
@@ -47,7 +50,7 @@ public class GameManager : MonoBehaviour {
 			if (food < 0) {
 				for (int i = -food; i > 0; i--) {
 					bool killedPeople = false;
-					int t = Random.Range(0,tiles.Length);
+					int t = Random.Range(0,tiles.Count);
 					while (!killedPeople) {
 						if (tiles[t].people > 0) {
 							tiles[t].people--;
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour {
 						}
 						else {
 							t++;
-							if (t == tiles.Length) t = 0;
+							if (t == tiles.Count) t = 0;
 						}
 					}
 				}
@@ -65,6 +68,7 @@ public class GameManager : MonoBehaviour {
 		// Update status display
 		fText.text = "Food: "+food+"/"+mFood;
 		pText.text = "Population: "+people;
+		wText.text = "Wood: "+wood+"/"+mWood;
 		// Controls
 		// Click to select something
 		if (Input.GetMouseButtonDown(0)) {
@@ -98,6 +102,7 @@ public class GameManager : MonoBehaviour {
 				for (int i = 0; i < selected.actions.Length; i++) {
 					int tmp = i;
 					GameObject b = Instantiate(button);
+					b.GetComponentInChildren<Text>().text = selected.actions[tmp].actionName;
 					b.transform.SetParent(GameObject.FindGameObjectWithTag("UI").transform, false);
 					b.GetComponent<RectTransform>().localPosition += new Vector3(70*i, 0);
 					b.GetComponent<Button>().onClick.AddListener(() => selected.actions[tmp].TakeAction(selected.gameObject));
